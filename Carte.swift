@@ -1,18 +1,22 @@
 import Foundation
-import ArtOfWarProtocol
 
-class Carte : CarteProtocol, Equatable {
+// on doit ajouter le protocol Equatable plus tard
+class Carte : CarteProtocol {
 
 	// Les atributs d'une carte
-	var type_carte: String
-	var puissance_attaque: Int
-	var pv_defensif: Int
-	var pv_offensif: Int
-	var portee: [(Int, Int)]
-	var statut : Int // 0 pour deffensif, 1 pour offensif
-	var degats_subis : Int // elle sera restauree a 0 chaque neuf tour
+	var Type_carte: String
+	var Puissance_attaque: Int
+	var Pv_defensif: Int
+	var Pv_offensif: Int
+	var Portee: [(Int, Int)]
+	var Statut : Int // 0 pour deffensif, 1 pour offensif
+	var Degats_subis : Int // elle sera restauree a 0 chaque neuf tour
 
-	init(_ type_carte: String, _ puissance_attaque: Int, _ pv_defensif: Int,_ pv_offensif: Int,_ portee: [(Int, Int)]) throws {
+
+
+	// TO DO : find why we need 'required'
+
+	required init(_ type_carte: String, _ puissance_attaque: Int, _ pv_defensif: Int,_ pv_offensif: Int,_ portee: [(Int, Int)]) throws {
 		if type_carte.isEmpty {
 			// will throw error
 			// and will not create object anymore
@@ -34,78 +38,80 @@ class Carte : CarteProtocol, Equatable {
 			// will throw error
 		}
 
-		for port in portee {
-			let (x , y) = port
-			if x == nil || y == nil {
+		//for port in portee {
+			// let (x , y) = port
+			// if x == nil || y == nil {
 				// will throw error
-			}
-		}
+			// }
+		//}
 
 		// On doit ajouter self parce que l'attribut de la classe Carte et le parametre
 		// d'init ont le meme nom : type_carte. On peut oublier self si c'est pas le meme nom.
-		self.type_carte = type_carte
-		self.puissance_attaque = puissance_attaque
-		self.pv_defensif = pv_defensif
-		self.pv_offensif = pv_offensif
-		self.portee = portee
-		self.statut = 0 
-		self.degats_subis = 0
+		self.Type_carte = type_carte
+		self.Puissance_attaque = puissance_attaque
+		self.Pv_defensif = pv_defensif
+		self.Pv_offensif = pv_offensif
+		self.Portee = portee
+		self.Statut = 0 
+		self.Degats_subis = 0
+
 	}
 
 	func puissance_attaque() -> Int {
-		return self.puissance_attaque
+		return self.Puissance_attaque
 	}
 
-	mutating func puissance_attaque(_ puis_att: Int) {
+	func puissance_attaque(_ puis_att: Int) {
 		if (puis_att > 0 && puis_att < 7) {
-			self.puissance_attaque = puis_att
+			self.Puissance_attaque = puis_att
 		}
 	}
 
 	func pv_defensif() -> Int {
-		return self.pv_defensif
+		return self.Pv_defensif
 	}
 
 	func pv_offensif() -> Int {
-		return self.pv_offensif
+		return self.Pv_offensif
 	}
 	
 	
 	func pv_restants() -> Int {
 		// TO DO
+		return 0
 	} 
 
 	func statut() -> Int {
-		return self.statut
+		return self.Statut
 	}
 
-	mutating func statut(_ statut : Int) throws{
+	func statut(_ statut : Int) throws{
 		if (statut != 0 && statut != 1) {
 			// will throw error
 		}
 
-		self.statut = statut
+		self.Statut = statut
 	}
 
 	func portee() -> [(Int, Int)] {
-		return self.portee
+		return self.Portee
 	}
 
 	func type_carte() -> String {
-		return self.type_carte
+		return self.Type_carte
 	}
 
 	func degats_subis() -> Int {
-		return self.degats_subis
+		return self.Degats_subis
 	}
 
-	mutating func degats_subis(_ degats : Int) {
+	func degats_subis(_ degats : Int) {
 		if degats > 0 {
-			self.degats_subis = degats
+			self.Degats_subis = degats
 		}
 	}
 
-	func attaque (_ carte_attaquee : Carte ) throws -> Int {
+	public func attaque (_ carte_attaquee : CarteProtocol ) throws -> Int {
 
 		// Precondition : carte_attaquee doit etre sur le Plateau : je sais pas comment on va verifier ca ?? 
 
@@ -119,10 +125,10 @@ class Carte : CarteProtocol, Equatable {
 
 		if self.statut() == 0 {
 			// statut : deffensif
-			pv_attaquee = self.pv_defensif()
+			pv_attaquee = carte_attaquee.pv_defensif()
 		}
 		else {
-			pv_attaquee = self.pv_offensif()
+			pv_attaquee = carte_attaquee.pv_offensif()
 		}
 
 
