@@ -1,11 +1,10 @@
 // Implementation PlateauProtocol
 
 import Foundation
-import ArtOfWarProtocol
 
-// enum PlateauError : ErrorType {
-// 	case CoordoneesInvalides
-// }
+enum PlateauError : Error {
+ 	case CoordoneesInvalides
+}
 
 // extension PlateauError : CustomStringConvertible {
 // 	var description : String {
@@ -29,21 +28,21 @@ class Plateau : PlateauProtocol {
 	*/
 
 	// On va utiliser une matrice
-	var plateau : [(Int, Int, Carte)] // xCarte , yCarte , Carte
+	var plateau : [(Int, Int, CarteProtocol)] // xCarte , yCarte , Carte
 
-	init(){
-		plateau = [(Int, Int, Carte)]()
+	required init() {
+		plateau = [(Int, Int, CarteProtocol)]()
 	}
 
 	// On va implementer ca, parce qu'on a besoin d'un moyen de chercher une carte selon ses coordonnees.
-	func carte_en_position(_ x: Int, _ y: Int) -> Carte? {
+	func carte_en_position(_ x: Int, _ y: Int) -> CarteProtocol? {
 
 		if (x < 0 || x > 2) {
-			return Vide
+			return nil
 		}
 
 		if (y < 0 || y > 1) {
-			return Vide
+			return nil
 		}
 
 		for carte in plateau {
@@ -53,16 +52,16 @@ class Plateau : PlateauProtocol {
 			}
 		}
 
-		return Vide
+		return nil
 
 	}
 
-	func ajouter_plateau(_ carte : Carte, _ posX : Int, _ posY : Int) throws {
+	func ajouter_plateau(_ carte : CarteProtocol, _ posX : Int, _ posY : Int) throws {
 
 		// Verifier que les coordonnees sont valides :
-		if ( x < 0 || x > 2 || y < 0 || y > 1) {
+		if ( posX < 0 || posX > 2 || posY < 0 || posY > 1) {
 			// will throw error
-			throw Error
+			//throw PlateauError.CoordoneesInvalides
 		}
 
 		// Verifier si la case est vide :
@@ -99,22 +98,24 @@ class Plateau : PlateauProtocol {
     
     
     
-    func retirer_plateau(_ carte: Carte) throws -> Carte{
+    func retirer_plateau(_ carte: CarteProtocol) throws -> CarteProtocol{
 
         if self.plateau_vide(){ //plateau vide renvoie une erreur
-            throw Error
+            // throw Error
         }
 
         var i : Int = 0
         var nonRetire : Bool = true
         while nonRetire && i<plateau.count {
-            if plateau[i][2] == carte{    
-                return(plateau.remove(at: i)) //si on la carte du plateau correspond a celle en entree alors on supprime la carte du plateau et on return
+
+			let (x, y, c) = plateau[i]
+            if (((Carte) c) == ((Carte) carte)) {    
+                return((plateau.remove(at: i))[2]) //si on la carte du plateau correspond a celle en entree alors on supprime la carte du plateau et on return
             }
             i = i + 1
         }
 		if i == plateau.count { //si en ayant parcouru tout le plateau on a rien supprime, on renvoie un erreur
-			throw Error
+			// throw Error
 		}
 	}
 
@@ -124,7 +125,7 @@ class Plateau : PlateauProtocol {
 		var res : (Int, Int)
 		for i in 1...(plateau.count) {
 			if carte == plateau[i][2]{ // condition pour verifier que carte est bien dans le plateau
-				res = (plateau[i][0],plateau[i][1])
+				res = (plateau[i][0], plateau[i][1])
 			}
 		}
 		return res
@@ -143,12 +144,19 @@ class Plateau : PlateauProtocol {
 
 
 	func reorganiser_plateau(){
-
 		for i in 1...3 {
+
 			if !(est_occupee(i, 0)) && est_occupee(i,1) {
-				var temp : Carte = carte_en_position(i,1) //on cree une var temporaire pour ne pas supprimer la carte ajoutee
-				retirer_plateau(carte_en_position(i,1)) // on enleve la carte a l'arriere
-				ajouter_plateau(temp,i,0) //on ajoute la carte qui etait a l'arriere
+
+				//on cree une var temporaire pour ne pas supprimer la carte ajoutee
+				if let temp : Carte = carte_en_position(i,1){ 
+					// on enleve la carte a l'arriere
+					retirer_plateau(temp)
+
+					//on ajoute la carte qui etait a l'arriere
+					do { try ajouter_plateau(temp, i, 0)}
+					catch {}
+				}
 			}
 		}
 	}
@@ -156,29 +164,32 @@ class Plateau : PlateauProtocol {
 
 
 
-	func tuer(_ carte: CarteProtocol) throws { //presque la meme fonction que retirer_carte sans return
+	// tuer est presque la meme fonction que retirer_carte sans return
+	func tuer(_ carte: CarteProtocol) throws {
 
 		if self.plateau_vide(){ //plateau vide renvoie une erreur
-            throw Error
+            // throw Error
         }
 
         var i : Int = 0
         var nonRetire : Bool = true
-        while nonRetire && i<plateau.count {
-            if plateau[i][2] == carte{    
-                plateau.remove(at: i) //si on la carte du plateau correspond a celle en entree alors on supprime la carte du plateau 
-            	nonRetire=false
+        while nonRetire && i < plateau.count {
+            if plateau[i][2] == carte {
+			// si on la carte du plateau correspond a celle en entree 
+			// alors on supprime la carte du plateau     
+                plateau.remove(at: i) 
+            	nonRetire = false
 				i = i - 1 // pour ne pas avoir l'erreur qui suit
 			}
             i = i + 1
         }
 		if i == plateau.count { //si en ayant parcouru tout le plateau on a rien supprime, on renvoie un erreur
-			throw Error....
+			// throw Error....
 		}
 	}
 
 ////////////////////////////////////////////////////////////////////
-	func est_a_portee(_ p_def: Self, _ c_att: CarteProtocol, _ c_def: CarteProtocol) -> Bool {
+	func est_a_portee(_ p_def: Plateau, _ c_att: CarteProtocol, _ c_def: CarteProtocol) -> Bool {
 
 		
 	}
@@ -189,12 +200,43 @@ class Plateau : PlateauProtocol {
 		
 		var res : Int = 0
 		for i in plateau {
-			if plateau[3].statut == 0 {
+			if plateau[2].statut == 0 {
 				res+=1
 			}
 		}
 	}
+
+	func makeIterator() -> PlateauIterator {
+		return PlateauIterator(self)
+
+	}
 	
+}
+
+public class PlateauIterator : PlateauProtocolIterator {
+
+	var courant : Int
+	var plateau : Plateau
+
+	required init(_ p : Plateau) {
+		self.plateau = p
+		courant = -1
+	}
+
+
+	public func next() -> CarteProtocol? {
+		// On incremente courant pour passer a la valeur prochaine
+		courant = courant + 1
+
+		// On verifie si la courant-ieme valeur existe
+		// Sinon, on renvoie Vide
+		if (courant > (plateau.plateau.count - 1)) {
+			return nil
+		}
+		else {
+			return (plateau.plateau[courant])[2]
+		}
+	}
 }
 
 
