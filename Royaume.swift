@@ -4,23 +4,31 @@ import Foundation
 
 class Royaume : RoyaumeProtocol{
 
+	typealias TCarte = Carte
+
 	enum RoyaumeErreur : Error {
 		case royaumeVide
+	}
+
 	
 	// On utilisera un tableau pour implementer la file (FIFO)
-	
-	var list : [CarteProtocol]
+	var list : [Carte]
 
 	required init(){
 		list = [] 
 	}
 
 	// Pour ajouter une Carte
-	func ajouter_royaume(_ carte : CarteProtocol) {
+	func ajouter_royaume(_ carte : TCarte) {
 		// Si la carte n'est deja dans la liste, on l'ajoute
-		if(!list.contains(carte)){
-			list.append(carte)
+		
+		for i in 1...list.count{
+			if list[i] === carte {
+				return
+			}
 		}
+		
+		list.append(carte)
 	}
 
 
@@ -29,7 +37,7 @@ class Royaume : RoyaumeProtocol{
 	}
 
 	// Pour enlever une Carte
-	func retirer_royaume() throws -> CarteProtocol {
+	func retirer_royaume() throws -> Carte {
 		if (self.est_vide()) {
 			throw RoyaumeErreur.royaumeVide
 		}

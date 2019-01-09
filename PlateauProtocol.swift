@@ -34,6 +34,7 @@
 */
 public protocol PlateauProtocol: Sequence {
   associatedtype PlateauProtocolIterator : IteratorProtocol
+	  associatedtype TCarte : CarteProtocol
     /*
       init : -> PlateauProtocol
       Creee un plateau vide
@@ -56,7 +57,7 @@ public protocol PlateauProtocol: Sequence {
       Post : lance une erreur si une carte est deja presente (n'ajoute pas la carte)
       Post : lance une erreur si les coordonnes ne sont pas valides (<0 ou >=3)
     */
-    mutating func ajouter_plateau(_ carte: CarteProtocol, _ posX: Int, _ posY: Int) throws
+    mutating func ajouter_plateau(_ carte: TCarte, _ posX: Int, _ posY: Int) throws
 
     /*
       retirer_plateau : PlateauProtocol x CarteProtocol -> PlateauProtocol x CarteProtocol
@@ -67,7 +68,7 @@ public protocol PlateauProtocol: Sequence {
       Post : la carte est retiree du plateau
       Post : Lance une erreur si la precontion n'est pas respectee
     */
-    mutating func retirer_plateau(_ carte: CarteProtocol) throws -> CarteProtocol
+    mutating func retirer_plateau(_ carte: TCarte) throws -> CarteProtocol
 
     /*
       position_carte : PlateauProtocol x CarteProtocol -> (Int, Int)
@@ -76,7 +77,7 @@ public protocol PlateauProtocol: Sequence {
       Pre : la carte doit etre sur le plateau
       Post : retourne un tuple d'entier representant la position de la carte
     */
-    func position_carte(_ carte: CarteProtocol) -> (Int, Int)
+    func position_carte(_ carte: TCarte) -> (Int, Int)
 
     /*
       carte_en_position : PlateauProtocol x Int x Int -> CarteProtocol
@@ -86,7 +87,7 @@ public protocol PlateauProtocol: Sequence {
       Pre : y doit etre compris entre 0 et 1
       Post : retourne la carte a la position donnee au parametre
     */
-    func carte_en_position(_ x: Int, _ y: Int) -> CarteProtocol?
+    func carte_en_position(_ x: Int, _ y: Int) -> TCarte?
 
     /*
       est_occupee : PlateauProtocol x Int x Int -> Bool
@@ -107,7 +108,7 @@ public protocol PlateauProtocol: Sequence {
             - la carte attaquee doit etre sur le plateau attaque
       Post : retourne true si la carte est a portee, false sinon
     */
-    func est_a_portee(_ p_def: Self, _ c_att: CarteProtocol, _ c_def: CarteProtocol) -> Bool
+    func est_a_portee(_ p_def: Self, _ c_att: TCarte, _ c_def: TCarte) -> Bool
 
     /*
       reorganiser_plateau : PlateauProtocol -> PlateauProtocol
@@ -147,7 +148,7 @@ public protocol PlateauProtocol: Sequence {
       Pre : la carte doit etre sur le plateau
       Post : supprime la carte du plateau si elle meurt
     */
-    mutating func tuer(_ carte: CarteProtocol) throws
+    mutating func tuer(_ carte: TCarte) throws
 
     /*
       count_cartes_qui_peuvent_attaquer : PlateauProtocol -> Int

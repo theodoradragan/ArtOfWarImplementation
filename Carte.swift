@@ -9,8 +9,8 @@ class Carte : CarteProtocol {
 	var Pv_defensif: Int
 	var Pv_offensif: Int
 	var Portee: [(Int, Int)]
-	var Statut : Int // 0 pour defensif, 1 pour offensif
-	var Degats_subis : Int // elle sera restauree a 0 chaque nouveau tour
+	var Statut : Int // 0 pour deffensif, 1 pour offensif
+	var Degats_subis : Int // elle sera restauree a 0 chaque neuf tour
 
 	enum CarteErreur : Error {
 		case carteVide
@@ -20,7 +20,9 @@ class Carte : CarteProtocol {
 		case pvDef_INF_pvOff
 		case mauvaisStatut
 		case statutNonDefensif
-	} 
+		case coordPortInvalides
+	}
+
 
 
 	// TO DO : find why we need 'required'
@@ -28,7 +30,6 @@ class Carte : CarteProtocol {
 	required init(_ type_carte: String, _ puissance_attaque: Int, _ pv_defensif: Int,_ pv_offensif: Int,_ portee: [(Int, Int)]) throws {
 		if type_carte.isEmpty {
 			throw CarteErreur.carteVide
-			// and will not create object anymore
 		}
 
 		if puissance_attaque < 0 {
@@ -47,12 +48,17 @@ class Carte : CarteProtocol {
 			throw CarteErreur.pvDef_INF_pvOff
 		}
 
-		//for port in portee {
-			// let (x , y) = port
-			// if x == nil || y == nil {
-				// will throw error
-			// }
-		//}
+		for port in portee {
+			let (x , y) = port
+			if x == nil || y == nil {
+				throw CarteErreur.coordPortInvalides
+			}
+			else {
+				if x < 0 || y < 0 {
+					throw CarteErreur.coordPortInvalides
+				}
+			}
+		}
 
 		// On doit ajouter self parce que l'attribut de la classe Carte et le parametre
 		// d'init ont le meme nom : type_carte. On peut oublier self si c'est pas le meme nom.
@@ -102,7 +108,6 @@ class Carte : CarteProtocol {
 		if (statut != 0 && statut != 1) {
 			throw CarteErreur.mauvaisStatut
 		}
-
 		self.Statut = statut
 	}
 
@@ -130,7 +135,7 @@ class Carte : CarteProtocol {
 
 		// Precondition : la carte courante doit etre en statut pv_defensif
 		if(self.statut() != 0) { // Si la carte n'est pas en statut defensif
-			throw carteErreur.statutNonDefensif
+			throw CarteErreur.statutNonDefensif
 		}
 
 

@@ -10,6 +10,7 @@
 
 public protocol RoyaumeProtocol: Sequence {
   associatedtype RoyaumeProtocolIterator : IteratorProtocol
+associatedtype TCarte : CarteProtocol
     /*
       init : -> RoyaumeProtocol
       Creee un Royaume vide
@@ -22,7 +23,7 @@ public protocol RoyaumeProtocol: Sequence {
       Pre : la carte a ajouter ne doit pas etre deja dans le Royaume
       Post : ajoute la carte au Royaume
     */
-    mutating func ajouter_royaume(_ carte: CarteProtocol)
+    mutating func ajouter_royaume(_ carte: TCarte)
 
     /*
       retirer_royaume : RoyaumeProtocol x CarteProtocol -> RoyaumeProtocol x CarteProtocol
@@ -30,7 +31,7 @@ public protocol RoyaumeProtocol: Sequence {
       Pre : le Royaume n'est pas vide, sinon renvoie une erreur
       Post : retire la carte du Royaume
     */
-    mutating func retirer_royaume() throws -> CarteProtocol
+    mutating func retirer_royaume() throws -> TCarte
 
     /*
       est_vide : RoyaumeProtocol -> Bool
