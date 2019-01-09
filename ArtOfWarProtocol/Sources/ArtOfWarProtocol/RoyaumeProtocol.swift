@@ -70,5 +70,5 @@ protocol RoyaumeProtocolIterator: IteratorProtocol {
     Pre :
     Post : retourne la carte suivante dans la collection du Royaume, ou nil si on a atteint le fin de la collection
   */
-  mutating func next() -> CarteProtocol? 
+  mutating func next() -> CarteProtocol?
 }

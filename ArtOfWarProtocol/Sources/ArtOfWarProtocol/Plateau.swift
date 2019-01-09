@@ -71,7 +71,7 @@ public class Plateau : PlateauProtocol {
 		}
 
 		// Verifie si la case est bien vide :
-		if let carteAux = carte_en_position(posX, posY) {
+		if carte_en_position(posX, posY) != nil {
 			throw PlateauErrors.CaseNonVide
 		}
 
@@ -79,7 +79,7 @@ public class Plateau : PlateauProtocol {
 		// on place la carte au front
 
 		if posY == 1 {
-			if let carteEnArriere = self.carte_en_position(posX, 0) {
+			if self.carte_en_position(posX, 0) != nil {
 				// on ajoute la carte sur posX et posY
 				self.plateau.append((posX, posY, carte))
 			}
@@ -104,7 +104,7 @@ public class Plateau : PlateauProtocol {
 
 
 
-
+	@discardableResult
     public func retirer_plateau(_ carte: Carte) throws -> CarteProtocol{
 
         if self.plateau_vide() { //plateau vide renvoie une erreur
@@ -112,18 +112,18 @@ public class Plateau : PlateauProtocol {
         }
 
         var i : Int = 0
-        var nonRetire : Bool = true
 
-        while nonRetire && i<plateau.count {
+        while i < plateau.count {
             if ( carte === plateau[i].2 ) {    //si la carte correspond
                 let x = (plateau.remove(at: i)).2 //on supprime la carte du plateau et on return
 				return x
             }
             i = i + 1
         }
-		//if i == plateau.count { //si en ayant parcouru tout le plateau on a rien supprime, on renvoie un erreur
-			       throw PlateauErrors.CartePasSurPlateau
-		//}
+		// si on arrive ici, on a retire rien => erreur
+	
+		throw PlateauErrors.CartePasSurPlateau
+
 	}
 
 
@@ -175,8 +175,6 @@ public class Plateau : PlateauProtocol {
 	}
 
 
-
-
 	// tuer est presque la meme fonction que retirer_carte sans return
 	public func tuer(_ carte: Carte) throws {
 
@@ -205,9 +203,9 @@ public class Plateau : PlateauProtocol {
 	public func est_a_portee(_ p_def: Plateau, _ c_att: Carte, _ c_def: Carte) -> Bool {
 
     var res : Bool = false
-    var position_att : (Int,Int) = self.position_carte(c_att)
+    let position_att : (Int,Int) = self.position_carte(c_att)
     // pour la def ce n'est pas le meme plateau donc on precise:
-    var position_def : (Int,Int) = p_def.position_carte(c_def)
+    let position_def : (Int,Int) = p_def.position_carte(c_def)
 
     var possible : [(Int,Int)] = [] // on stock les cases atteignables
 

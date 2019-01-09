@@ -7,6 +7,7 @@
 
 public protocol MainProtocol: Sequence {
     associatedtype MainProtocolIterator : IteratorProtocol
+	associatedtype TCarte : CarteProtocol
     /*
       init : -> MainProtocol
       Creee une Main vide
@@ -19,7 +20,7 @@ public protocol MainProtocol: Sequence {
       Pre :
       Post : la carte est ajoutee a La Main
     */
-    mutating func ajouter_main(_ carte: CarteProtocol)
+    mutating func ajouter_main(_ carte: TCarte)
 
     /*
       retirer_main : MainProtocol x CarteProtocol -> MainProtocol x CarteProtocol
@@ -31,7 +32,7 @@ public protocol MainProtocol: Sequence {
       (Note : renvoyer la carte est inutile car le parametre demande la reference
       mais il s'agit plutot d'une verification)
     */
-    mutating func retirer_main(_ carte: CarteProtocol) throws -> CarteProtocol
+    mutating func retirer_main(_ carte: TCarte) throws -> TCarte
 
     /*
       count_main : MainProtocol -> Int
@@ -58,8 +59,8 @@ public protocol MainProtocol: Sequence {
   MainProtocolIterator est un iterateur de MainProtocol qui aide au parcours de la collection
   de MainProtocol.
 */
-protocol MainProtocolIterator: IteratorProtocol {
 
+protocol MainProtocolIterator: IteratorProtocol {
     /*
       next : MainProtocolIterator -> MainProtocolIterator x CarteProtocol?
       renvoie la prochaine carte de la collection de la Main

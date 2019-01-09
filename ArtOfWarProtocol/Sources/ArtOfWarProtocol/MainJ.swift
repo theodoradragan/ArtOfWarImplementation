@@ -3,23 +3,24 @@
 import Foundation
 
 public class MainJ : MainProtocol{
+	public typealias TCarte = Carte
 	
 	// Pour creer l'erreur(s) necessaire(s)
 	enum MainErreur : Error {
 		case cartePasTrouvee 
 	} 
 
-    var mainJ : [CarteProtocol]
+    var mainJ : [Carte]
 
     public required init(){
         mainJ = []
     }
 
-    public func ajouter_main(_ carte: CarteProtocol){
+    public func ajouter_main(_ carte: TCarte){
         mainJ.append(carte)
     }
 
-    public func retirer_main(_ carte: CarteProtocol) throws -> CarteProtocol {
+    public func retirer_main(_ carte: TCarte) throws -> TCarte {
 		let n = mainJ.count - 1
 		for i in 0...n {
 			// On efface la premiere carte avec le nom "Archer"
@@ -48,7 +49,6 @@ public class MainJ : MainProtocol{
 }
 
 public class MainIterator : MainProtocolIterator {
-
 	var courant : Int
 	var mainJ : MainJ
 

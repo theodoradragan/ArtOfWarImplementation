@@ -34,7 +34,7 @@
 */
 public protocol PlateauProtocol: Sequence {
   associatedtype PlateauProtocolIterator : IteratorProtocol
-	  associatedtype TCarte : CarteProtocol
+	associatedtype TCarte : CarteProtocol
     /*
       init : -> PlateauProtocol
       Creee un plateau vide

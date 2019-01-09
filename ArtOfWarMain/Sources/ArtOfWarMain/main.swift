@@ -104,16 +104,16 @@ func str_carte_stats(_ c: Carte) -> String {
     var str: String = "";
 	
     str = str +  c.type_carte();
-    str = str +  "\t Attaque : " + c.puissance_attaque()
+    str = str +  "\t Attaque : " + String(c.puissance_attaque())
     if (c.statut() == 1) {
         str = str +  "\t Statut : Offensif"
     } else {
         str = str +  "\t Statut : Defensif"
     }
-    str = str +  "\t PV en statut Defensif : " + c.pv_defensif()
-    str = str +  "\t PV en statut Offensif : " + c.pv_offensif()
+    str = str +  "\t PV en statut Defensif : " + String(c.pv_defensif())
+    str = str +  "\t PV en statut Offensif : " + String(c.pv_offensif())
 
-    str = str +  "\t PV restants : " + c.pv_restants()
+    str = str +  "\t PV restants : " + String(c.pv_restants())
 
     return str;
 }
@@ -127,13 +127,13 @@ func str_carte_stats(_ c: Carte) -> String {
 func str_carte_red(_ c: Carte) -> String {
     var str: String = "";
     str = str +  c.type_carte()
-    str = str +  " (" + c.puissance_attaque()
+    str = str +  " (" + String(c.puissance_attaque())
     if (c.statut() == 1) {
         str = str + ", Off"
     } else {
         str = str +  ", Def"
     }
-    str = str +  ", " + c.pv_restants() + ")"
+    str = str +  ", " + String(c.pv_restants()) + ")"
     return str;
 }
 
@@ -339,7 +339,7 @@ func tour_de_jeu(_ main: MainJ, _ pioche: Pioche, _ plateau: Plateau, _ royaume:
 
     ==> par exemple : tab[2][1] renvoie la carte en position (1,0) du plateau du J2
 */
-func align_champ_bataille(_ p_joueur_actif: PlateauProtocol, _ p_joueur_inactif: PlateauProtocol) -> [[Carte?]] {
+func align_champ_bataille(_ p_joueur_actif: Plateau, _ p_joueur_inactif: Plateau) -> [[Carte?]] {
     var tab = [[Carte?]]();
 
     // Ligne numero 1

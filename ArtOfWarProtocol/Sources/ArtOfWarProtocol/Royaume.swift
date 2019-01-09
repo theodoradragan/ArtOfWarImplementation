@@ -12,7 +12,7 @@ public class Royaume : RoyaumeProtocol{
 
 	
 	// On utilisera un tableau pour implementer la file (FIFO)
-	var list : [Carte]
+	var list : [TCarte]
 
 	public required init(){
 		list = [] 
