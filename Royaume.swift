@@ -4,6 +4,8 @@ import Foundation
 
 class Royaume : RoyaumeProtocol{
 
+	enum RoyaumeErreur : Error {
+		case royaumeVide
 	
 	// On utilisera un tableau pour implementer la file (FIFO)
 	
@@ -29,7 +31,7 @@ class Royaume : RoyaumeProtocol{
 	// Pour enlever une Carte
 	func retirer_royaume() throws -> CarteProtocol {
 		if (self.est_vide()) {
-			// will throw exception
+			throw RoyaumeErreur.royaumeVide
 		}
 		else {
 			return list.removeFirst()

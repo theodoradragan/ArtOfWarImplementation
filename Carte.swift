@@ -3,39 +3,48 @@ import Foundation
 // on doit ajouter le protocol Equatable plus tard
 class Carte : CarteProtocol {
 
-	// Les atributs d'une carte
+	// Les attributs d'une carte
 	var Type_carte: String
 	var Puissance_attaque: Int
 	var Pv_defensif: Int
 	var Pv_offensif: Int
 	var Portee: [(Int, Int)]
-	var Statut : Int // 0 pour deffensif, 1 pour offensif
-	var Degats_subis : Int // elle sera restauree a 0 chaque neuf tour
+	var Statut : Int // 0 pour defensif, 1 pour offensif
+	var Degats_subis : Int // elle sera restauree a 0 chaque nouveau tour
 
+	enum CarteErreur : Error {
+		case carteVide
+		case attaqueNegative
+		case pvDefNegatif
+		case pvOffNegatif
+		case pvDef_INF_pvOff
+		case mauvaisStatut
+		case statutNonDefensif
+	} 
 
 
 	// TO DO : find why we need 'required'
 
 	required init(_ type_carte: String, _ puissance_attaque: Int, _ pv_defensif: Int,_ pv_offensif: Int,_ portee: [(Int, Int)]) throws {
 		if type_carte.isEmpty {
-			// will throw error
+			throw CarteErreur.carteVide
 			// and will not create object anymore
 		}
 
 		if puissance_attaque < 0 {
-			// will throw error
+			throw CarteErreur.attaqueNegative
 		}
 
 		if pv_defensif < 0 {
-			// will throw error
+			throw CarteErreur.pvDefNegatif
 		}
 
 		if pv_offensif < 0 {
-			// will throw error
+			throw CarteErreur.pvOffNegatif
 		}
 
 		if pv_defensif < pv_offensif {
-			// will throw error
+			throw CarteErreur.pvDef_INF_pvOff
 		}
 
 		//for port in portee {
@@ -77,8 +86,12 @@ class Carte : CarteProtocol {
 	
 	
 	func pv_restants() -> Int {
-		// TO DO
-		return 0
+		if self.Statut == 0{ 	//statut = 0 = defensif
+			return self.Pv_defensif - self.Degats_subis
+		}
+		else{ 	//sinon on est en position offensif
+			return self.Pv_offensif - self.Degats_subis
+		}
 	} 
 
 	func statut() -> Int {
@@ -87,7 +100,7 @@ class Carte : CarteProtocol {
 
 	func statut(_ statut : Int) throws{
 		if (statut != 0 && statut != 1) {
-			// will throw error
+			throw CarteErreur.mauvaisStatut
 		}
 
 		self.Statut = statut
@@ -117,13 +130,13 @@ class Carte : CarteProtocol {
 
 		// Precondition : la carte courante doit etre en statut pv_defensif
 		if(self.statut() != 0) { // Si la carte n'est pas en statut defensif
-			// will throw exception
+			throw carteErreur.statutNonDefensif
 		}
 
 
 		var pv_attaquee : Int // les points de vie de la carte attaquee
 
-		if self.statut() == 0 {
+		if carte_attaquee.statut() == 0 {
 			// statut : deffensif
 			pv_attaquee = carte_attaquee.pv_defensif()
 		}
