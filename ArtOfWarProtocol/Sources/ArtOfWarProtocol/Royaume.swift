@@ -58,6 +58,8 @@ public class Royaume : RoyaumeProtocol{
 
 public class RoyaumeIterator : RoyaumeProtocolIterator {
 
+	public typealias TCarte = Carte
+
 	var courant : Int
 	var royaume : Royaume
 
@@ -67,7 +69,7 @@ public class RoyaumeIterator : RoyaumeProtocolIterator {
 	}
 
 
-	public func next() -> CarteProtocol? {
+	public func next() -> TCarte? {
 		// On incremente courant pour passer a la valeur prochaine
 		courant = courant + 1
 

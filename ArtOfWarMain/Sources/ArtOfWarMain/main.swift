@@ -168,11 +168,11 @@ func str_plateau(_ plateau: Plateau) -> String {
 func str_champ_bataille(_ p_joueur_actif: Plateau, _ p_joueur_inactif: Plateau) -> String {
     var str: String = ""
 
-    var tab = align_champ_bataille(p_joueur_actif, p_joueur_inactif)
+    let tab = align_champ_bataille(p_joueur_actif, p_joueur_inactif)
 
-    for ligne in tab.reverse() {
-        for carte in ligne {
-            if carte != nil {
+    for ligne in tab.reversed() {
+        for carteO in ligne {
+            if let carte = carteO {
                 str = str +  str_carte_red(carte)
                 str = str +  "\t"
             } else {

@@ -181,6 +181,7 @@ public protocol PlateauProtocol: Sequence {
   On veut parcourir le Plateau en partant de la Carte en position (0,0) jusqu'en position (3,1)
 */
 protocol PlateauProtocolIterator : IteratorProtocol {
+	associatedtype TCarte : CarteProtocol
 
   /*
     next : PlateauProtocolIterator -> PlateauProtocolIterator x CarteProtocol?
@@ -188,5 +189,5 @@ protocol PlateauProtocolIterator : IteratorProtocol {
     Pre :
     Post : retourne la carte suivante dans la collection du Plateau, ou nil si on a atteint le fin de la collection
   */
-  mutating func next() -> CarteProtocol?
+  mutating func next() -> TCarte?
 }

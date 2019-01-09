@@ -61,11 +61,12 @@ public protocol MainProtocol: Sequence {
 */
 
 protocol MainProtocolIterator: IteratorProtocol {
+	associatedtype TCarte : CarteProtocol
     /*
       next : MainProtocolIterator -> MainProtocolIterator x CarteProtocol?
       renvoie la prochaine carte de la collection de la Main
       Pre :
       Post : retourne la carte suivante dans la collection de la Main, ou nil si on a atteint le fin de la collection
     */
-    mutating func next() -> CarteProtocol?
+    mutating func next() -> TCarte?
 }

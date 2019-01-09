@@ -64,11 +64,12 @@ associatedtype TCarte : CarteProtocol
   On itere dans le Royaume de la plus ancienne a la plus recente.
 */
 protocol RoyaumeProtocolIterator: IteratorProtocol {
+associatedtype TCarte : CarteProtocol
   /*
     next : RoyaumeProtocolIterator -> RoyaumeProtocolIterator x CarteProtocol?
     renvoie la prochaine carte dans la collection du Royaume
     Pre :
     Post : retourne la carte suivante dans la collection du Royaume, ou nil si on a atteint le fin de la collection
   */
-  mutating func next() -> CarteProtocol?
+  mutating func next() -> TCarte?
 }

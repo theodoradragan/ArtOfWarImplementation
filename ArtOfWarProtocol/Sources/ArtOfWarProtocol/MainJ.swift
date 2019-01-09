@@ -43,32 +43,36 @@ public class MainJ : MainProtocol{
 		return mainJ.isEmpty
 	}
 
+
+
+
 	public func makeIterator() -> MainIterator {
 		return MainIterator(self)
 	}
 }
 
-public class MainIterator : MainProtocolIterator {
-	var courant : Int
-	var mainJ : MainJ
+	public class MainIterator : MainProtocolIterator {
+		public typealias TCarte = Carte
+		var courant : Int
+		var mainJ : MainJ
 
-	init(_ m : MainJ) {
-		self.mainJ = m
-		courant = -1
-	}
-
-
-	public func next() -> CarteProtocol? {
-		// On incremente courant pour passer a la valeur prochaine
-		courant = courant + 1
-
-		// On verifie si la courant-ieme valeur existe
-		// Sinon, on renvoie Vide
-		if (courant > (mainJ.mainJ.count - 1)) {
-			return nil
+		init(_ m : MainJ) {
+			self.mainJ = m
+			courant = -1
 		}
-		else {
-			return mainJ.mainJ[courant]
+
+
+		public func next() -> TCarte? {
+			// On incremente courant pour passer a la valeur prochaine
+			courant = courant + 1
+
+			// On verifie si la courant-ieme valeur existe
+			// Sinon, on renvoie Vide
+			if (courant > (mainJ.mainJ.count - 1)) {
+				return nil
+			}
+			else {
+				return mainJ.mainJ[courant]
+			}
 		}
 	}
-}

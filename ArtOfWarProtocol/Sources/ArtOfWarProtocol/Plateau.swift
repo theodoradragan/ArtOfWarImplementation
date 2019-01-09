@@ -311,6 +311,8 @@ public class Plateau : PlateauProtocol {
 
 public class PlateauIterator : PlateauProtocolIterator {
 
+	public typealias TCarte = Carte
+
 	var courant : Int
 	var plateau : Plateau
 
@@ -320,7 +322,7 @@ public class PlateauIterator : PlateauProtocolIterator {
 	}
 
 
-	public func next() -> CarteProtocol? {
+	public func next() -> TCarte? {
 		// On incremente courant pour passer a la valeur prochaine
 		courant = courant + 1
 
