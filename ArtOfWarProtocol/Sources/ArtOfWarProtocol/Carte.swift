@@ -20,7 +20,6 @@ public class Carte : CarteProtocol {
 		case pvDef_INF_pvOff
 		case mauvaisStatut
 		case statutNonDefensif
-		case coordPortInvalides
 	}
 
 
@@ -46,13 +45,6 @@ public class Carte : CarteProtocol {
 
 		if pv_defensif < pv_offensif {
 			throw CarteErreur.pvDef_INF_pvOff
-		}
-
-		for port in portee {
-			let (x , y) = port
-			if x < 0 || y < 0 {
-				throw CarteErreur.coordPortInvalides
-			}
 		}
 
 		// On doit ajouter self parce que l'attribut de la classe Carte et le parametre
