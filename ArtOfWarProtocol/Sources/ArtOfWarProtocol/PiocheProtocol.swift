@@ -6,6 +6,7 @@
 */
 
 protocol PiocheProtocol {
+	associatedtype TCarte : CarteProtocol
     /*
       init : -> PiocheProtocol
       Creee une pioche vide
@@ -18,7 +19,7 @@ protocol PiocheProtocol {
       Pre :
       Post : retourne une carte choisie au hasard dans la Pioche ou nil si la Pioche est vide
     */
-    mutating func piocher() -> CarteProtocol?
+    mutating func piocher() -> TCarte?
 
     /*
       ajouter_pioche : PiocheProtocol x CarteProtocol -> PiocheProtocol
@@ -26,7 +27,7 @@ protocol PiocheProtocol {
       Pre : la carte a ajouter ne doit pas etre deja dans la Pioche
       Post : ajoute la carte a la Pioche
     */
-    mutating func ajouter_pioche(_ carte: CarteProtocol)
+    mutating func ajouter_pioche(_ carte: TCarte)
 
     /*
       count_pioche : PiocheProtocol -> Int

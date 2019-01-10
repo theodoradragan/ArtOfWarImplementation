@@ -245,13 +245,15 @@ func tour_de_jeu(_ main: MainJ, _ pioche: Pioche, _ plateau: Plateau, _ royaume:
     // -- Passez les cartes sur le champ de bataille du joueurs actif en position défensive -- //
     // -- Reinitialiser les dégâts subits -- //
     for c in (plateau) {
-        c.status(0)
-        c.degats_subis(0)
+        do{
+			try c.statut(0)
+		}catch{}
+        c.degats_subis(0)	
     }
 
     // -- Pioche s'il reste des cartes et ajoute a la main -- //
     if (pioche.count_pioche() > 0) {
-        if var c = pioche.piocher() {
+        if let c = pioche.piocher() {
             main.ajouter_main(c)
         }
     }
@@ -269,7 +271,7 @@ func tour_de_jeu(_ main: MainJ, _ pioche: Pioche, _ plateau: Plateau, _ royaume:
     print(str_royaume(royaume))
 
     // -- Choisir entre “Rien”, “Deployer”, “Attaquer” -- //
-    var action = Int(input("Que voulez vous faire ? \n - 1 : Rien\n - 2 : Deployer\n - 3 : Attaquer\n", ["1", "2", "3"]))
+    let action = Int(input("Que voulez vous faire ? \n - 1 : Rien\n - 2 : Deployer\n - 3 : Attaquer\n", ["1", "2", "3"]))
 
     // -- Traitement de l'action "Deployer" -- //
     if (action == 2) {
@@ -278,7 +280,7 @@ func tour_de_jeu(_ main: MainJ, _ pioche: Pioche, _ plateau: Plateau, _ royaume:
 
     // -- Traitement de l'action "Attaquer" -- //
     else if (action == 3) {
-        var res = phase_attaque(plateau, plateau_ennemi, royaume, royaume_ennemi, main, main_ennemi)
+        let res = phase_attaque(plateau, plateau_ennemi, royaume, royaume_ennemi, main, main_ennemi)
         if res == 1 || res == 2 {
             return res
         }
@@ -286,14 +288,14 @@ func tour_de_jeu(_ main: MainJ, _ pioche: Pioche, _ plateau: Plateau, _ royaume:
 
     // === PHASE DE DEVELOPPEMENT
 
-    while (main.count_main() > 6 || input("Attribuer carte de la main au Royaume", ["Y", "N"]) == "Y") && main.count_main > 0 {
+    while (main.count_main() > 6 || input("Attribuer carte de la main au Royaume", ["Y", "N"]) == "Y") && main.count_main() > 0 {
         print(str_royaume(royaume))
 
-        var carte = choisir_main(main)
+        let carte = choisir_main(main)
         do {
-            try main.retirer_main(carte)
+            try _ = main.retirer_main(carte)
             royaume.ajouter_royaume(carte)
-        }
+        } catch {}
     }
 
     return 0
@@ -431,7 +433,7 @@ func align_champ_bataille(_ p_joueur_actif: Plateau, _ p_joueur_inactif: Plateau
     Parameters :
         - main  La main a traiter
 */
-func tab_main(_ main: MainJ) -> [MainJ] {
+func tab_main(_ main: MainJ) -> [Carte] {
     var tab = [Carte]();
 
     var i = 0
@@ -447,24 +449,24 @@ func tab_main(_ main: MainJ) -> [MainJ] {
 /*
     Demande au joueur de choisir une carte dans sa main et retourne la carte choisie
 */
-func choisir_main(_ main: MainJ) -> Carte {
+func choisir_main(_ main_j1: MainJ) -> Carte {
     // Affichage de la main du J1
-    print(str_main(main))
+    print(str_main(main_j1))
 
     // On reccupere un tableau de cartes de la main
     var tab_main_j1 = tab_main(main_j1)
 
     // Cree un tableau des reponses admissibles
     var rep_admissibles = [String]()
-    for i in (0..<count(tab_main_j1)) {
-        rep_admissibles.append(str(i))
+    for i in (0..<tab_main_j1.count) {
+        rep_admissibles.append(String(i))
     }
 
     // Demande au joueur
-    var rep = Int(input("Choisir une carte de votre main a placer sur le Royaume", rep_admissibles))
+    let rep = Int(input("Choisir une carte de votre main a placer sur le Royaume", rep_admissibles))
 
     // Identifie la carte choisie en fonction de la reponse
-    var carte_choisie = tab_main_j1[rep]
+    let carte_choisie = tab_main_j1[rep!]
 
     return carte_choisie
 }
@@ -475,7 +477,8 @@ func choisir_main(_ main: MainJ) -> Carte {
     alors redemande de nouvelles positions ou placer la carte
 */
 func deployer_carte(_ main: MainJ, _ plateau: Plateau) {
-    var carte_choisie = choisir_main(main)
+	
+    let carte_choisie = choisir_main(main)
 
     var placee: Bool = false
     while !placee {
@@ -483,33 +486,35 @@ func deployer_carte(_ main: MainJ, _ plateau: Plateau) {
         print(str_plateau(plateau))
 
         // Cree un tableau des reponses admissibles
-        var posX = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
-        var posY = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
+        let posXIn = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
+        let posYIn = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
 
         // Ajoute la carte au plateau
-        if (plateau.est_occupe(posX, posY)) {
-            reponse = input("Cette position est deja occupee, voulez vous echanger ces deux cartes ?", ["Y", "N"])
-            if reponse == "Y" {
-                if let c2 = plateau.carte_en_position(posX, posY) {
-                    do {
-                        try plateau.retirer_plateau(c2)
-                        try plateau.ajouter_plateau(carte_choisie, posX, posY)
-                        main.ajouter_main(c2)
-                        try main.retirer_main(carte_choisie)
-                        placee = true
-                    } catch {
-                        print("erreur : Veuillez reessayer")
-                    }
-                }
-            }
-        } else {
-            do {
-                try plateau.ajouter_plateau(carte_choisie, posX, posY)
-                placee = true
-            } catch {
-                print("Erreur : Veuillez reessayer")
-            }
-        }
+		if let posX = posXIn, let posY = posYIn{
+			if plateau.est_occupee(posX, posY) {
+				    let reponse = input("Cette position est deja occupee, voulez vous echanger ces deux cartes ?", ["Y", "N"])
+				    if reponse == "Y" {
+				        if let c2 = plateau.carte_en_position(posX, posY) {
+				            do {
+				                try plateau.retirer_plateau(c2)
+				                try plateau.ajouter_plateau(carte_choisie, posX, posY)
+				                main.ajouter_main(c2)
+				                try _ = main.retirer_main(carte_choisie)
+				                placee = true
+				            } catch {
+				                print("erreur : Veuillez reessayer")
+				            }
+				        }
+				    }
+				} else {
+				    do {
+				        try _ = plateau.ajouter_plateau(carte_choisie, posX, posY)
+				        placee = true
+				    } catch {
+				        print("Erreur : Veuillez reessayer")
+				    }
+				}
+		}
     }
 }
 
@@ -520,18 +525,20 @@ func choisir_carte_plateau(_ plateau: Plateau) -> Carte? {
         print(str_plateau(plateau))
 
         // Cree un tableau des reponses admissibles
-        var posX = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
-        var posY = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
+        let posX = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
+        let posY = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
 
         // Ajoute la carte au plateau
-        if (plateau.est_occupe(posX, posY)) {
-            if let c = plateau.carte_en_position(posX, posY) {
-                return c
-            }
-            ok = true
-        } else {
-            ok = input("Cette position est vide, voulez vous recommencer ?") == "N"
-        }
+	if let posXNew = posX, let posYNew = posY {
+		if (plateau.est_occupee(posXNew, posYNew)) {
+		    if let c = plateau.carte_en_position(posXNew, posYNew) {
+		        return c
+		    }
+		    ok = true
+		} else {
+		    ok = input("Cette position est vide, voulez vous recommencer ?") == "N"
+		}
+	}
     }
     return nil;
 }
@@ -573,149 +580,157 @@ func phase_attaque(_ plateau_att: Plateau, _ plateau_def: Plateau, _ royaume_att
 
     // -- Tant qu’il reste des cartes qui peuvent attaquer
     //		ET que le joueur veut continuer d’attaquer    -- //
-    while (continuer && plateau_att.count_cartes_qui_peuvent_attaquer()) {
-        var err: Bool = false
+    while (continuer && plateau_att.count_cartes_qui_peuvent_attaquer() != 0) {
 
         // Affiche le champ de bataille
-        print(str_champ_bataille(plateau_j1, plateau_j2))
+        print(str_champ_bataille(plateau_att, plateau_def))
 
         print("Choisir la Carte Attaquante")
         print(str_plateau(plateau_att))
-        var posX_off = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
-        var posY_off = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
+        let posX_offIn = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
+        let posY_offIn = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
 
 
         print("Choisir le Carte qui subit l'attaque")
         print(str_plateau(plateau_def))
-        var posX_def = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
-        var posY_def = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
+        let posX_defIn = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
+        let posY_defIn = Int(input("Choisir la position y (horizontale) ou assigner cette carte", ["0", "1"]))
 
-        if (plateau_att.est_occupe(posX_off, posY_off) && plateau_def.est_occupe(posX_def, posY_def)) {
-            // -- Verification de la validité : La carte peut attaquer et est à portée d'attaque de la 2ème carte -- //
+	if let posX_off = posX_offIn, let posY_off = posY_offIn, let posX_def = posX_defIn, let posY_def = posY_defIn {
+		if (plateau_att.est_occupee(posX_off, posY_off) && plateau_def.est_occupee(posX_def, posY_def)) {
+		    // -- Verification de la validité : La carte peut attaquer et est à portée d'attaque de la 2ème carte -- //
 
-            // Reccupere la carte attaquante
-            guard var c_att = plateau_att.carte_en_position(posX_off, posY_off) else {
-                err = true
-            }
+		    // Reccupere la carte attaquante
+		    if let c_att = plateau_att.carte_en_position(posX_off, posY_off), let c_def = plateau_def.carte_en_position(posX_def, posY_def){
+		        // Verifie la portee
+		        // Si la carte est a portee : Attaque
+		        if plateau_att.est_a_portee(plateau_def, c_att, c_def) {
 
-            // Reccupere la carte attaquee
-            guard var c_def = plateau_def.carte_en_position(posX_def, posY_def) else {
-                err = true
-            }
-            if (!err) {
-                // Verifie la portee
-                // Si la carte est a portee : Attaque
-                if plateau_att.est_a_portee(plateau_def, c_att, c_def) {
+		            // L'attaque du soldat est determinee en fonction du nbr de cartes en main
+		            if (c_att.type_carte() == "Soldat") {
+		                //do {
+		                    //try --> pas besoin
+							c_att.puissance_attaque(main_off.count_main())
+		               // } catch {
+		                //}
 
-                    // L'attaque du soldat est determinee en fonction du nbr de cartes en main
-                    if (c_att.type_carte() == "Soldat") {
-                        do {
-                            try c_att.puissance_attaque(main_off.count_main())
-                        } catch {
-                        }
+		            }
 
-                    }
+		            // L'unite peut attaquer plusieurs cibles
+		            let attaque: Int  //RIEN FAIT AVEC CA. ENCORE BESOIN de var ?
 
-                    // L'unite peut attaquer plusieurs cibles
-                    var attaque: Int = 1
+		            // On definis un tableau des differentes cibles
+		            var tabdef = [Carte]()
 
-                    // On definis un tableau des differentes cibles
-                    var tabdef = [Carte]()
+		            // On identifie les cibles du roi (seule carte dans notre modele a attaquer plusieurs cibles
+		            // Il lui faut au moins une cible valide pour attaquer (d'ou la verif juste au dessus)
+		            if (c_att.type_carte() == "Roi") {
+		                attaque = c_att.portee().count
 
-                    // On identifie les cibles du roi (seule carte dans notre modele a attaquer plusieurs cibles
-                    // Il lui faut au moins une cible valide pour attaquer (d'ou la verif juste au dessus)
-                    if (c_att.type_carte() == "Roi") {
-                        attaque = count(c_att.portee())
+						/*
+						WHO IS TAB CHAMP BATAIILE ?*/
+						var tab_champ_bataille = align_champ_bataille(plateau_att, plateau_def)
+		                if (posX_off == 1) {
+		                    tabdef.append(tab_champ_bataille[2][0]!) // Added ! . Not best way, but acceptable for testing.
+		                    tabdef.append(tab_champ_bataille[2][0]!)
+		                    tabdef.append(tab_champ_bataille[2][0]!)
+		                    if (attaque == 4) {
+		                        tabdef.append(tab_champ_bataille[3][posY_off]!)
+		                    }
+		                } else {
+		                    if (attaque == 4) {
+		                        tabdef.append(tab_champ_bataille[3][posY_off]!)
+		                    }
+		                }
+						
+		            }
 
-                        if (posX_off == 1) {
-                            tabdef.append(tab_champ_bataille[2][0])
-                            tabdef.append(tab_champ_bataille[2][0])
-                            tabdef.append(tab_champ_bataille[2][0])
-                            if (attaque == 4) {
-                                tabdef.append(tab_champ_bataille[3][posY_att])
-                            }
-                        } else {
-                            if (attaque == 4) {
-                                tabdef.append(tab_champ_bataille[3][posY_att])
-                            }
-                        }
-                    }
+		            for carte_attaquee in tabdef {
+		                //if (carte_attaquee != nil) { ELLE EST JAMAIS NIL
+		                    // La carte attaque
+		                    var res : Int
+					
+							do{
+								try res = c_att.attaque(carte_attaquee)
+								// La carte def est morte
+				                if res < 0 {
+				                    if (carte_attaquee.type_carte() == "Roi") {
+				                        return 2 // Roi mort
+				                    } else {
+				                        do {try plateau_def.tuer(carte_attaquee)} catch{}
+				                    }
 
-                    for carte_attaquee in tabdef {
-                        if (carte_attaquee != nil) {
-                            // La carte attaque
-                            var res = c_att.attaque(carte_attaquee)
-
-                            // La carte def est morte
-                            if res < 0 {
-                                if (carte_attaquee.type_carte == Roi) {
-                                    return 2 // Roi mort
-                                } else {
-                                    plateau_def.tuer(carte_attaquee)
-                                }
-
-                                // La carte def est capturee
-                            } else if res == 0 {
-                                do {
-                                    try plateau_def.retirer_plateau(carte_attaquee)
-                                    royaume_att.ajouter_royaume(carte_attaquee)
-                                } catch {
-                                }
-
-
-                                // La carte def subit des degats
-                            } else {
-                                carte_attaquee.degats_subis(res)
-                            }
-                        }
-                    }
-
-                    c_att.statut(1)
-                    plateau_def.reorganiser_plateau()
-                }
+				                    // La carte def est capturee
+				                } else if res == 0 {
+				                    do {
+				                        try plateau_def.retirer_plateau(carte_attaquee)
+				                        royaume_att.ajouter_royaume(carte_attaquee)
+				                    } catch {
+				                    }
 
 
-                // Conscription
-                if (plateau_def.plateau_vide()) {
+				                    // La carte def subit des degats
+				                } else {
+				                    carte_attaquee.degats_subis(res)
+				                }
+							}catch{}         
+		                //}
+		            }
 
-                    // On se sert dans le royaume pour remettre la troupe dans le champ de bataille
-                    if (!royaume_def.est_vide()) {
-                        do {
-                            var c = try royaume_def.retirer_royaume()
-                        } catch {
-                        }
-
-                        var pos = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
-                        plateau_def.ajouter_plateau(c, pos, 0)
-                        // On se sert dans la main pour remettre la troupe dans le champ de bataille
-                    } else if (!main_def.est_vide()) {
-                        var c = choisir_main(main_def)
-                        do {
-                            try main_def.retirer_main(c)
-                        } catch {
-                        }
-                        var pos = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
-                        plateau_def.ajouter_plateau(carte, pos, 0)
+		            do {try c_att.statut(1)} catch{}
+		            plateau_def.reorganiser_plateau()
+		        }
 
 
-                    } else {
-                        return 1 // Effondrement
-                    }
+		        // Conscription
+		        if (plateau_def.plateau_vide()) {
+					var c : Carte
 
-                }
-
-                // Si la carte n'est pas a portee
-                else {
-                    print("Pas a portee")
-                }
-
-            } else {
-                print("La carte a deja attaque")
-            }
-
-        }
+		            // On se sert dans le royaume pour remettre la troupe dans le champ de bataille
+		            if (!royaume_def.est_vide()) {
+		                do {
+		                    c = try royaume_def.retirer_royaume()
 
 
+							// Toutes operations avec c on doit les mettre ici.
+							// Sinon, on risque qu,elle est pas initialisee
+
+							let posIn = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
+							if let pos = posIn {
+				            	do {try plateau_def.ajouter_plateau(c, pos, 0)} catch{}
+							}
+		                } catch {}
+
+		                // On se sert dans la main pour remettre la troupe dans le champ de bataille
+		            } else if (!main_def.est_vide()) {
+				            c = choisir_main(main_def)
+				            do {
+				                try _ = main_def.retirer_main(c)
+
+								// Toutes operations avec c on doit les mettre ici.
+								// Sinon, on risque qu,elle est pas initialisee
+	 							let posIn = Int(input("Choisir la position x (verticale) ou assigner cette carte", ["0", "1", "2"]))
+				            	if let pos = posIn {
+								do { try plateau_def.ajouter_plateau(c, pos, 0) } catch{}
+							}
+				            } catch { }
+				        } else {
+				            return 1 // Effondrement
+				        }
+		        }
+
+		        // Si la carte n'est pas a portee
+		        else {
+		            print("Pas a portee")
+		        }
+
+		    } else {
+		        print("La carte a deja attaque")
+		    }
+
+		}
+
+	}
         continuer = input ("Continuer a attaquer ? ") == "Y"
 
     }
@@ -730,15 +745,17 @@ func phase_attaque(_ plateau_att: Plateau, _ plateau_def: Plateau, _ royaume_att
     retourne la pioche creee
 */
 func init_pioche() -> Pioche {
-    var pioche = Pioche()
+    let pioche = Pioche()
 
     let portee_soldat = [(0, 1)]
     let portee_archers = [(1, 2), (-1, 2), (2, 1), (-2, 1)]
 
+	var c : Carte
+
     // Cree les 9 soldats
-    for i in (0...8) {
+    for _ in (0...8) {
         do {
-            var c = try Carte("Soldat", 1, 2, 1, portee_soldat)
+            c = try Carte("Soldat", 1, 2, 1, portee_soldat)
         } catch {
             fatalError("Erreur creation cartes soldats")
         }
@@ -746,21 +763,21 @@ func init_pioche() -> Pioche {
     }
 
     // Cree les 6 gardes
-    for i in (0...5) {
+    for _ in (0...5) {
         do {
-            var c = try Carte("Garde", 1, 3, 2, portee_soldat)
+            c = try Carte("Garde", 1, 3, 2, portee_soldat)
         } catch {
-            fatalError("Erreur creation cartes soldats")
+            fatalError("Erreur creation cartes gardes")
         }
         pioche.ajouter_pioche(c)
     }
 
     // Cree les 5 archers
-    for i in (0...4) {
+    for _ in (0...4) {
         do {
-            var c = try Carte("Archer", 1, 2, 1, portee_archers)
+            c = try Carte("Archer", 1, 2, 1, portee_archers)
         } catch {
-            fatalError("Erreur creation cartes soldats")
+            fatalError("Erreur creation cartes archers")
         }
         pioche.ajouter_pioche(c)
     }
@@ -790,47 +807,51 @@ var plateau_j1 = Plateau()
 var plateau_j2 = Plateau()
 
 
+
 // -- Remplit les pioches des 2 joueurs de 9 soldats, 6 gardes et 5 archers -- //
 
 // Instanciation des Pioches
 var pioche_j1 = init_pioche()
 var pioche_j2 = init_pioche()
 
-
 // --  Met dans les mains des 2 joueurs 1 roi (random) et les 3 premières cartes de la pioche (= piocher 3x) -- //
-
+var roi1 : Carte
+var roi2 : Carte
 // Instanciation des Rois
+
 do {
-    try var roi1 = Carte("Roi", 1, 4, 4, [(0, 1), (0, 2), (-1, 1), (1, 1)])
-    try var roi2 = Carte("Roi", 1, 5, 4, [(0, 1), (-1, 1), (1, 1)])
+    roi1 = try Carte("Roi", 1, 4, 4, [(0, 1), (0, 2), (-1, 1), (1, 1)])
+    roi2 = try Carte("Roi", 1, 5, 4, [(0, 1), (-1, 1), (1, 1)])
 } catch {
     fatalError("Erreur creation cartes soldats")
 }
+
 
 // Ajout des Rois dans les Mains
 main_j1.ajouter_main(roi1)
 main_j2.ajouter_main(roi2)
 
 // Piocher + Ajout main
-for i in (1...3) {
+for _ in (1...3) {
     if let c = pioche_j1.piocher() {
         main_j1.ajouter_main(c)
     }
 }
-for i in (1...3) {
+for _ in (1...3) {
     if let c = pioche_j2.piocher() {
         main_j2.ajouter_main(c)
     }
 }
 
+
 // -- Piocher une carte dans la pioche et la placer dans le Royaume (pour les 2 joueurs) -- //
 if let c = pioche_j1.piocher() {
-    royaume_j1.ajouter_royaume(c)
+    royaume_j1.ajouter_royaume(c) // ICI ERREUR
 }
+
 if let c = pioche_j2.piocher() {
     royaume_j2.ajouter_royaume(c)
 }
-
 // -- Choisir n’importe quelle carte de sa main et la placer sur le Front -- //
 
 // Demande au J1 de choisir une carte de sa main
@@ -840,7 +861,6 @@ deployer_carte(main_j1, plateau_j1)
 // Demande au J2 de choisir une carte de sa main
 print("Joueur 2")
 deployer_carte(main_j2, plateau_j2)
-
 
 // === JEU === //
 

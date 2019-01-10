@@ -21,12 +21,16 @@ public class Royaume : RoyaumeProtocol{
 	// Pour ajouter une Carte
 	public func ajouter_royaume(_ carte : TCarte) {
 		// Si la carte n'est deja dans la liste, on l'ajoute
-		
-		for i in 1...list.count{
-			if list[i] === carte {
-				return
+
+		if !list.isEmpty {
+			for i in 0..<list.count{
+				if list[i] === carte {
+					return
+				}
 			}
-		}
+		}	
+
+		
 		
 		list.append(carte)
 	}
