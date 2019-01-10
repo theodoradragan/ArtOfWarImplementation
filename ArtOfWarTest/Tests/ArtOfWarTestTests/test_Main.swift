@@ -6,18 +6,18 @@
 var portee: [(Int, Int)] = [(1, 2), (0, 1)];
 var porteeVide = [];
 do {
-    try var carte = Carte("Soldat", 3, 4, 3, portee);
+    var carte = try Carte("Soldat", 3, 4, 3, portee);
 } catch {}
 
 func test_ajouter_main() -> Int{
     var m1 = Main()
     m1.ajouter_main(carte)
 
-    var isIn = false 
+    var isIn = false
     for c1 in m1 {
         if carte === c1 {
             isIn = true
-        } 
+        }
     }
     if isIn == false {
         print("KO : La carte n'est pas dans la main")
@@ -40,13 +40,13 @@ func test_retirer_main() -> Int{
     var m1 = Main()
     m1.ajouter_main(carte)
     do {
-        try var retire = m1.retirer_main(carte)
+        var retire = try m1.retirer_main(carte)
     } catch {}
-    
+
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+      var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     var isNotIn = true
@@ -70,7 +70,7 @@ func test_retirer_main() -> Int{
     }
 
     do {
-        try var retire2 = m1.retirer_main(c2)
+        var retire2 = try m1.retirer_main(c2)
         print("KO : On a retire une carte qui n'est pas dans la main")
         return 0
     } catch {
@@ -82,7 +82,7 @@ func test_retirer_main() -> Int{
 
 func test_count_main() -> Int{
     var m1 = Main()
-    
+
     if m1.count_main() != 0 {
         print("KO : On compte un nombre de carte different de 0")
         return 0
@@ -102,9 +102,9 @@ func test_count_main() -> Int{
     }
 
     do {
-        try var carte = m1.retirer_main(carte)
+        var carte = try m1.retirer_main(carte)
     } catch {}
-    
+
     if m1.count_main() != 0 {
         print("KO : On compte un nombre de carte different de 0")
         return 0
@@ -124,7 +124,7 @@ func test_est_vide() -> Int{
     }
 
     m1.ajouter_main(carte)
-    
+
     if m1.est_vide() {
         print("KO : La main n'est aps censee etre vide")
         return 0

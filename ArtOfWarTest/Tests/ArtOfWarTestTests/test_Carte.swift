@@ -20,7 +20,7 @@ func test_init() -> Int{
 
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
         print("Test Carte valide Ok")
     } catch {
         print("Erreur d'init : Une carte valide a renvoye une exception");
@@ -30,7 +30,7 @@ func test_init() -> Int{
 
     // Cartes non valides
     do {
-        try var c2 = Carte("", 3, 4, 3, portee);
+        var c2 = try Carte("", 3, 4, 3, portee);
         print("Erreur d'init : Une carte ne peut pas avoir de chaine vide en type_carte");
         return 0;
     } catch {
@@ -38,7 +38,7 @@ func test_init() -> Int{
     }
 
     do {
-        try var c3 = Carte("Soldat", -1, 4, 3, portee);
+        var c3 = try Carte("Soldat", -1, 4, 3, portee);
         print("Erreur d'init : Une carte ne peut pas avoir de valeur negative pour puissance_attaque");
         return 0;
     } catch {
@@ -46,7 +46,7 @@ func test_init() -> Int{
     }
 
     do {
-        try var c4 = Carte("Soldat", 3, -1, -1, portee);
+        var c4 = try Carte("Soldat", 3, -1, -1, portee);
         print("Erreur d'init : Une carte ne peut pas avoir de valeur negative pour les pv");
         return 0;
     } catch {
@@ -55,7 +55,7 @@ func test_init() -> Int{
 
     do {
         // Pv def < pf off ==> Carte non valide
-        try var c5  = Carte("Soldat", 3, 1, 3, portee);
+        var c5  = try Carte("Soldat", 3, 1, 3, portee);
         print("Erreur d'init : Une carte ne peut pas avoir pv_defensif < pv_offensif");
         return 0;
     } catch {
@@ -63,7 +63,7 @@ func test_init() -> Int{
     }
 
     do {
-        try var c6 = Carte("Soldat", 3, 4, 3, nil);
+        var c6 = try Carte("Soldat", 3, 4, 3, nil);
         print("Erreur d'init : Une carte ne peut pas avoir nil en portee");
         return 0;
     } catch {
@@ -71,7 +71,7 @@ func test_init() -> Int{
     }
 
     do {
-        try var c7 = Carte("Soldat", 3, 4, 3, porteeVide);
+        var c7 = try Carte("Soldat", 3, 4, 3, porteeVide);
         print("Erreur d'init : Une carte ne peut pas avoir un tableau vide en portee");
         return 0;
     } catch {
@@ -92,7 +92,7 @@ func test_puissance_attaque() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
         if (c1.puissance_attaque() != 3) {
             print("Test ko : la puissance d'attaque ne renvoie pas la bonne valeur")
             return 0;
@@ -105,7 +105,7 @@ func test_puissance_attaque() -> Int{
     }
 
     do {
-        try var c2 = Carte("Soldat", -1, 4, 3, portee);
+        var c2 = try Carte("Soldat", -1, 4, 3, portee);
         print("Test ko : La puissance d'attaque ne peut pas etre negative");
         return 0;
     } catch {
@@ -119,7 +119,7 @@ func test_puissance_attaque() -> Int{
 func test_puissance_attaque2() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     do {
@@ -146,7 +146,7 @@ func test_puissance_attaque2() -> Int{
         return 0
     }
 
-    return 1    
+    return 1
 }
 
 func test_pv_defensif() -> Int{
@@ -155,7 +155,7 @@ func test_pv_defensif() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
         if (c1.pv_defensif() != 4) {
             print("Test ko : pv_defensif ne renvoie pas la bonne valeur")
             return 0;
@@ -168,7 +168,7 @@ func test_pv_defensif() -> Int{
     }
 
     do {
-        try var c2 = Carte("Soldat", 4, -1, 3, portee);
+        var c2 = try Carte("Soldat", 4, -1, 3, portee);
         print("Test ko : Les pv_defensif ne peuvent pas etre negatifs");
         return 0;
     } catch {
@@ -176,7 +176,7 @@ func test_pv_defensif() -> Int{
     }
 
     do {
-        try var c3 = Carte("Soldat", 4, 0, 3, portee);
+        var c3 = try Carte("Soldat", 4, 0, 3, portee);
         print("Test ko : Les pv_defensif ne peuvent pas etre nuls");
         return 0;
     } catch {
@@ -184,7 +184,7 @@ func test_pv_defensif() -> Int{
     }
 
     do {
-        try var c4 = Carte("Soldat", 4, 3, 5, portee);
+        var c4 = try Carte("Soldat", 4, 3, 5, portee);
         print("Test ko : Les pv_defensif ne peuvent pas etre etre inferieurs aux pv offensifs");
         return 0;
     } catch {
@@ -202,7 +202,7 @@ func test_pv_offensif() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
         if (c1.pv_offensif() != 3) {
             print("Test ko : pv_offensif ne renvoie pas la bonne valeur")
             return 0;
@@ -215,7 +215,7 @@ func test_pv_offensif() -> Int{
     }
 
     do {
-        try var c2 = Carte("Soldat", 4, 3, -1, portee);
+        var c2 = try Carte("Soldat", 4, 3, -1, portee);
         print("Test ko : Les pv_offensif ne peuvent pas etre negatifs");
         return 0;
     } catch {
@@ -223,7 +223,7 @@ func test_pv_offensif() -> Int{
     }
 
     do {
-        try var c3 = Carte("Soldat", 4, 2, 0, portee);
+        var c3 = try Carte("Soldat", 4, 2, 0, portee);
         print("Test ko : Les pv_offensif ne peuvent pas etre nuls");
         return 0;
     } catch {
@@ -231,7 +231,7 @@ func test_pv_offensif() -> Int{
     }
 
     do {
-        try var c4 = Carte("Soldat", 4, 3, 5, portee);
+        var c4 = try Carte("Soldat", 4, 3, 5, portee);
         print("Test ko : Les pv_offensif ne peuvent pas etre etre superieur aux pv defensif");
         return 0;
     } catch {
@@ -248,7 +248,7 @@ func test_statut() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {
         print("Erreur d'init : Une carte valide a renvoye une exception");
         return 0;
@@ -294,7 +294,7 @@ func test_portee() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {
         print("Erreur d'init : Une carte valide a renvoye une exception");
         return 0;
@@ -310,7 +310,7 @@ func test_portee() -> Int{
     var porteeNonValide: [(Int, Int)] = [(1, 2), (0, 0)];
     // Carte valide
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, porteeNonValide);
+        var c2 = try Carte("Soldat", 3, 4, 3, porteeNonValide);
         print("Test ko : Portee (0,0)  non geree");
         return 0;
     } catch {
@@ -328,7 +328,7 @@ func test_type_carte() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {
         print("Erreur d'init : Une carte valide a renvoye une exception");
         return 0;
@@ -342,7 +342,7 @@ func test_type_carte() -> Int{
     }
 
     do {
-        try var c1 = Carte("", 3, 4, 3, portee);
+        var c1 = try Carte("", 3, 4, 3, portee);
         print("Test Ko : Chane vide pas valable")
         return 0
     } catch {
@@ -361,7 +361,7 @@ func test_degats_subis() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {
         print("Erreur d'init : Une carte valide a renvoye une exception");
         return 0;
@@ -392,8 +392,8 @@ func test_attaque() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     // Carte valide
     do {
-        try var c1 = Carte("Soldat", 3, 4, 3, portee);
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+        var c1 = try Carte("Soldat", 3, 4, 3, portee);
+        var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {
         print("Erreur d'init : Une carte valide a renvoye une exception");
         return 0;
@@ -401,7 +401,7 @@ func test_attaque() -> Int{
 
     // Attque d'une carte de 3 d'attaque sur une carte de 4 de def (statut def). Resultat attendu : retour int positif
     do {
-        try res = c1.attaque(c2)
+        res = try c1.attaque(c2)
         if (res <= 0) {
             print("Test Ko : La carte n'est pas censee etre morte")
             return 0

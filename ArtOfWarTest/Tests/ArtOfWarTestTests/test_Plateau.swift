@@ -6,7 +6,7 @@
 var portee: [(Int, Int)] = [(1, 2), (0, 1)];
 var porteeVide = [];
 do {
-    try var carte = Carte("Soldat", 3, 4, 3, portee);
+    var carte = try Carte("Soldat", 3, 4, 3, portee);
 } catch {}
 
 func test_ajouter_plateau() -> Int{
@@ -14,12 +14,12 @@ func test_ajouter_plateau() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+        var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c3 = Carte("Soldat", 3, 4, 3, portee);
+        var c3 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     do {
@@ -87,13 +87,13 @@ func test_retirer_plateau() -> Int{
     var p1 = Plateau()
     p1.ajouter_plateau(carte, 0, 0)
     do {
-        try var retire = p1.retirer_plateau(carte)
+        var retire = try p1.retirer_plateau(carte)
     } catch {}
-    
+
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+        var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     var isNotIn = true
@@ -110,7 +110,7 @@ func test_retirer_plateau() -> Int{
     }
 
     do {
-        try var retire2 = p1.retirer_plateau(c2)
+        var retire2 = try p1.retirer_plateau(c2)
         print("KO : On a retire une carte qui n'est pas sur le plateau")
         return 0
     } catch {
@@ -152,7 +152,7 @@ func test_carte_en_position() -> Int{
         print("KO : Aucune carte n'a ete retiree")
         return 0
     }
-    
+
     if let retire1 = p1.carte_en_position(0, 1) {
         print("KO : On a retourne une carte a un emplacement vide")
         return 0
@@ -173,7 +173,7 @@ func test_est_occupee() -> Int{
         print("KO : La case est censee ne pas etre occupee")
         return 0
     }
-    
+
     if p1.est_occupee(0, 1) {
         print("KO : La case n'est pas censee etre occupee")
         return 0
@@ -189,7 +189,7 @@ func test_reorganiser_plateau() -> Int{
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+        var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     p1.ajouter_plateau(carte, 0,0)
@@ -217,7 +217,7 @@ func test_reorganiser_plateau() -> Int{
 
 func test_plateau_vide() -> Int{
     var p1 = Plateau()
-        
+
     if p1.plateau_vide() {
         print("OK")
     } else {
@@ -242,11 +242,11 @@ func test_tuer() -> Int{
     do {
         try p1.tuer(carte)
     } catch {}
-    
+
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+        var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     var isNotIn = true
@@ -295,7 +295,7 @@ func test_count_cartes_qui_peuvent_attaquer() -> Int{
         print("OK")
     }
 
-    return 1    
+    return 1
 }
 
 // ==== Tests ====

@@ -6,20 +6,20 @@
 var portee: [(Int, Int)] = [(1, 2), (0, 1)];
 var porteeVide = [];
 do {
-    try var carte = Carte("Soldat", 3, 4, 3, portee);
+    var carte = try Carte("Soldat", 3, 4, 3, portee);
 } catch {}
 
 func test_piocher() -> Int{
     var p1 = Pioche()
     p1.ajouter_pioche(carte)
     do {
-        try var retire = p1.piocher()
+        var retire = try p1.piocher()
     } catch {}
-    
+
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
     var porteeVide = [];
     do {
-        try var c2 = Carte("Soldat", 3, 4, 3, portee);
+        var c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     var isNotIn = true
@@ -56,11 +56,11 @@ func test_ajouter_pioche() -> Int{
     var p1 = Pioche()
     p1.ajouter_pioche(carte)
 
-    var isIn = false 
+    var isIn = false
     for c1 in p1 {
         if carte === c1 {
             isIn = true
-        } 
+        }
     }
     if isIn == false {
         print("KO : La carte n'est pas dans la pioche")
@@ -81,7 +81,7 @@ func test_ajouter_pioche() -> Int{
 
 func test_count_pioche() -> Int{
     var p1 = Pioche()
-    
+
     if p1.count_pioche() != 0 {
         print("KO : On compte un nombre de carte different de 0")
         return 0
@@ -99,9 +99,9 @@ func test_count_pioche() -> Int{
     }
 
     do {
-        try var retire = p1.piocher()
+        var retire = try p1.piocher()
     } catch {}
-    
+
     if p1.count_pioche() != 0 {
         print("KO : On compte un nombre de carte different de 0")
         return 0
