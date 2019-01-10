@@ -39,7 +39,7 @@ public class Carte : CarteProtocol {
 			throw CarteErreur.pvDefNegatif
 		}
 
-		if pv_offensif < 0 {
+		if pv_offensif <= 0 {
 			throw CarteErreur.pvOffNegatif
 		}
 

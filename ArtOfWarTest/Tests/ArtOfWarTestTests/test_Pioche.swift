@@ -1,30 +1,32 @@
 // === Tests Unitaires d'une Pioche ===
 
+print("===== TESTS PIOCHE ===== \n")
+
 // Le test passe si init n'est pas nil.
 // Renvoie 1 si le test passe, 0 sinon
 
-var portee: [(Int, Int)] = [(1, 2), (0, 1)];
-var porteeVide = [];
+
 do {
-    var carte = try Carte("Soldat", 3, 4, 3, portee);
+    carte = try Carte("Soldat", 3, 4, 3, portee);
 } catch {}
 
 func test_piocher() -> Int{
-    var p1 = Pioche()
+    var p1 : Pioche = Pioche()
     p1.ajouter_pioche(carte)
+	var retire : Carte?
     do {
-        var retire = try p1.piocher()
+        retire = try p1.piocher()
     } catch {}
 
     var portee: [(Int, Int)] = [(1, 2), (0, 1)];
-    var porteeVide = [];
-    do {
-        var c2 = try Carte("Soldat", 3, 4, 3, portee);
+	var c2 : Carte    
+	do {
+        c2 = try Carte("Soldat", 3, 4, 3, portee);
     } catch {}
 
     var isNotIn = true
-    for c1 in p1 {
-        if c1 === retire {
+    for i in 0..<p1.count_pioche() {
+        if p1.num_pioche(i) === retire {
             isNotIn = false
         }
     }
@@ -57,8 +59,8 @@ func test_ajouter_pioche() -> Int{
     p1.ajouter_pioche(carte)
 
     var isIn = false
-    for c1 in p1 {
-        if carte === c1 {
+    for j in 0..<p1.count_pioche() {
+        if p1.num_pioche(j) === carte {
             isIn = true
         }
     }
@@ -97,9 +99,10 @@ func test_count_pioche() -> Int{
     } else {
         print("OK")
     }
-
+	
+	var retire : Carte?
     do {
-        var retire = try p1.piocher()
+        retire = try p1.piocher()
     } catch {}
 
     if p1.count_pioche() != 0 {
@@ -113,8 +116,8 @@ func test_count_pioche() -> Int{
 }
 
 // ==== Tests ====
-var nb_test_ok: Int = 0;
-var nb_test_tot: Int = 0;
+nb_test_ok = 0;
+nb_test_tot = 0;
 
 nb_test_tot += 1;
 nb_test_ok += test_piocher();
@@ -126,5 +129,5 @@ nb_test_tot += 1;
 nb_test_ok += test_count_pioche();
 
 
-print("=== FIN DES TESTS ===")
-print("\(nb_test_ok) fonctions ont passe les tests sur \(nb_test_tot)")
+print("\n\(nb_test_ok) fonctions ont passe les tests sur \(nb_test_tot) ")
+print("=== TESTS PIOCHE === \n \n")

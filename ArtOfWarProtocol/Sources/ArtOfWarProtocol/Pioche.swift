@@ -39,4 +39,13 @@ public class Pioche : PiocheProtocol{
 	
 	}
 
+	/* Cette fonction n'est pas dans les specifications 
+	 num_pioche(Int) -> Carte
+	 par: un entier < longueur pioche  
+	 post: renvoie l'element de la pioche qui se siture en position i
+	*/
+	public func num_pioche(_ i:Int) ->TCarte{
+		return pioche[i]
+	}
+
 }
