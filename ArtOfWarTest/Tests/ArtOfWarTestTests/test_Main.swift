@@ -2,13 +2,13 @@
 
 // Le test passe si init n'est pas nil.
 // Renvoie 1 si le test passe, 0 sinon
-
+import ArtOfWarProtocol
 var portee: [(Int, Int)] = [(1, 2), (0, 1)];
 var carte : Carte = try Carte("Soldat", 3, 4, 3, portee)
 var c3 : Carte = try Carte("Soldat", 2, 3, 3, portee)
 
 func test_ajouter_main() -> Int{
-    var m1 = MainJ()
+    let m1 = MainJ()
     m1.ajouter_main(carte)
 
     var isIn = false
@@ -35,7 +35,7 @@ func test_ajouter_main() -> Int{
 }
 
 func test_retirer_main() -> Int{
-    var m1 = MainJ()
+    let m1 = MainJ()
     m1.ajouter_main(carte)
 	var retire : Carte = carte
     do {
@@ -69,9 +69,8 @@ func test_retirer_main() -> Int{
     }
 	
 	m1.ajouter_main(c3)
-	var retire2 : Carte
     do {
-        retire2 = try m1.retirer_main(c2)
+        _ = try m1.retirer_main(c2)
         print("KO : On a retire une carte qui n'est pas dans la main")
         return 0
     } catch {
@@ -83,7 +82,7 @@ func test_retirer_main() -> Int{
 
 
 func test_count_main() -> Int{
-    var m1 = MainJ()
+    let m1 = MainJ()
 
     if m1.count_main() != 0 {
 		print("KO : On compte un nombre de carte different de 0");
@@ -101,9 +100,9 @@ func test_count_main() -> Int{
     } else {
         print("KO : On n'a rajoute une carte et on ne la compte pas")
     }
-	var carte2 : Carte
+
     do {
-        carte2 = try m1.retirer_main(carte)
+        _ = try m1.retirer_main(carte)
     } catch {}
 
     if m1.count_main() != 0 {
@@ -115,7 +114,7 @@ func test_count_main() -> Int{
 }
 
 func test_est_vide() -> Int{
-    var m1 = MainJ()
+    let m1 = MainJ()
 
     if !m1.est_vide() {
         print("KO : La main est censee etre vide")

@@ -23,8 +23,8 @@ public class MainJ : MainProtocol{
     public func retirer_main(_ carte: TCarte) throws -> TCarte {
 		let n = mainJ.count - 1
 		for i in 0...n {
-			// On efface la premiere carte avec le nom "Archer"
-			if mainJ[i].type_carte() == carte.type_carte(){
+			// On efface notre carte
+			if mainJ[i] === carte {
 				let x = carte
 				mainJ.remove(at: i)
 				return x
