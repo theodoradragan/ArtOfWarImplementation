@@ -105,7 +105,7 @@ public class Plateau : PlateauProtocol {
 
 
 	@discardableResult
-    public func retirer_plateau(_ carte: Carte) throws -> CarteProtocol{
+    public func retirer_plateau(_ carte: Carte) throws -> TCarte{
 
         if self.plateau_vide() { //plateau vide renvoie une erreur
             throw PlateauErrors.PlateauVide

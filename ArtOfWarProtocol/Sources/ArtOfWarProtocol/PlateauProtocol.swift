@@ -68,7 +68,7 @@ public protocol PlateauProtocol: Sequence {
       Post : la carte est retiree du plateau
       Post : Lance une erreur si la precontion n'est pas respectee
     */
-    mutating func retirer_plateau(_ carte: TCarte) throws -> CarteProtocol
+    mutating func retirer_plateau(_ carte: TCarte) throws -> TCarte
 
     /*
       position_carte : PlateauProtocol x CarteProtocol -> (Int, Int)
