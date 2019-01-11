@@ -33,7 +33,7 @@ public class Plateau : PlateauProtocol {
 	*/
 
 	// On va utiliser une matrice
-	var plateau : [(xCarte : Int, yCarte: Int, carte : Carte)] // xCarte , yCarte , Carte
+	public var plateau : [(xCarte : Int, yCarte: Int, carte : Carte)] // xCarte , yCarte , Carte
 
 	public required init() {
 		plateau = [(Int, Int, Carte)]()
@@ -88,6 +88,9 @@ public class Plateau : PlateauProtocol {
 				self.plateau.append((posX, 0, carte))
 			}
 		}
+		else {
+			self.plateau.append((posX, posY, carte))
+		}
 	}
 
    	
@@ -105,6 +108,7 @@ public class Plateau : PlateauProtocol {
 
 
 	@discardableResult
+
     public func retirer_plateau(_ carte: Carte) throws -> TCarte{
 
         if self.plateau_vide() { //plateau vide renvoie une erreur
@@ -130,7 +134,7 @@ public class Plateau : PlateauProtocol {
 	public func position_carte(_ carte: Carte) -> (Int, Int){
 
 		var res : (Int, Int) = (-1 , -1)
-		for i in 1...(plateau.count) {
+		for i in 0..<plateau.count {
 			if carte === plateau[i].2{ // condition pour verifier que carte est bien dans le plateau
 				res = (plateau[i].0, plateau[i].1)
 			}
