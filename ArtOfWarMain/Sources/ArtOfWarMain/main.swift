@@ -608,11 +608,11 @@ func phase_attaque(_ plateau_att: Plateau, _ plateau_def: Plateau, _ royaume_att
 
 		            // L'attaque du soldat est determinee en fonction du nbr de cartes en main
 		            if (c_att.type_carte() == "Soldat") {
-		                //do {
-		                    //try --> pas besoin
+		                do {
+		                    try
 							c_att.puissance_attaque(main_off.count_main())
-		               // } catch {
-		                //}
+		                } catch {
+		                }
 
 		            }
 
