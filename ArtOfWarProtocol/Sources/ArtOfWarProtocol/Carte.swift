@@ -20,6 +20,8 @@ public class Carte : CarteProtocol {
 		case pvDef_INF_pvOff
 		case mauvaisStatut
 		case statutNonDefensif
+		case mauvaisePuissance
+		case porteenulle
 	}
 
 
@@ -46,6 +48,7 @@ public class Carte : CarteProtocol {
 		if pv_defensif < pv_offensif {
 			throw CarteErreur.pvDef_INF_pvOff
 		}
+		
 
 		// On doit ajouter self parce que l'attribut de la classe Carte et le parametre
 		// d'init ont le meme nom : type_carte. On peut oublier self si c'est pas le meme nom.
@@ -63,9 +66,12 @@ public class Carte : CarteProtocol {
 		return self.Puissance_attaque
 	}
 
-	public func puissance_attaque(_ puis_att: Int) {
+	public func puissance_attaque(_ puis_att: Int) throws{
 		if (puis_att > 0 && puis_att < 7) {
 			self.Puissance_attaque = puis_att
+		}
+		else{
+			throw CarteErreur.mauvaisePuissance
 		}
 	}
 
@@ -125,6 +131,7 @@ public class Carte : CarteProtocol {
 			throw CarteErreur.statutNonDefensif
 		}
 
+		do { try self.statut(1)} catch{}
 
 		var pv_attaquee : Int // les points de vie de la carte attaquee
 
@@ -135,7 +142,6 @@ public class Carte : CarteProtocol {
 		else {
 			pv_attaquee = carte_attaquee.pv_offensif()
 		}
-
 
 		if self.puissance_attaque() > pv_attaquee {
 			// la carte_attaquee va mourrir
@@ -148,8 +154,12 @@ public class Carte : CarteProtocol {
 		}
 
 		else {
+			// carte_attaquee.pv_defensif = carte_attaquee.pv_restants()
+			
 			return self.puissance_attaque()
 		}
+
+		
 
 	}
 

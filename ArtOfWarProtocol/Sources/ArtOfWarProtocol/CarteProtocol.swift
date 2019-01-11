@@ -43,7 +43,7 @@ public protocol CarteProtocol {
     // Pre : la puissance d'attaque doit etre prositive
     // Pre : la puissance d'attaque est comprise entre 1 et 6 (inclus)
     // Post : modifie la puissance d'attaque de la carte
-    mutating func puissance_attaque(_ puis_att: Int)
+    mutating func puissance_attaque(_ puis_att: Int) throws // correction: ajout du throw sinon ne passe pas le test
 
     // pv_defensif : CarteProtocol -> Int
     // Post : retourne les pv de la carte lorsqu'elle est en statut defensif
